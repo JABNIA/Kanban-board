@@ -1,0 +1,174 @@
+
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-ExtraLight.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-ExtraBold.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-ExtraBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-Light.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-Bold.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-Medium.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-SemiBold.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./assets/fonts/PlusJakartaSans-Regular.woff2') format('woff2'),
+  url('./assets/fonts/PlusJakartaSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root{
+  --color-Main: #635FC7;
+  --color-Main-Opacity: rgba(99, 95, 199, 0.25);
+  --color-Active: #A8A4FF;
+  --color-Black: #000112;
+  --color-Dark-Background: #20212C;
+  --color-Dark-Components: #2B2C37;
+  --color-Dark-Gray: #3E3F4E;
+  --color-Gray: #828FA3;
+  --color-Gray-Opacity: rgba(130, 143, 163, 0.25);
+  --color-Border: #E4EBFA;
+  --color-Background: #F4F7FD;
+  --color-White: #FFFFFF;
+  --color-Tomato: #EA5555;
+  --color-Tomato-Active: #FF9898;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(228, 221, 232);
+  overflow: auto;
+  font-family: "Plus Jakarta Sans";
+}
+
+ul{
+  list-style: none;
+}
+
+
+@keyframes menuSlideShow{
+  0% {
+    left: -300px;
+  }
+  100%{
+    left: 0px;
+  }
+}
+
+@keyframes menuSlideHide{
+  0% {
+    left: 0px;
+  }
+  100%{
+    left: -300;
+  }
+}
+
+@keyframes slideFar{
+  0% {
+    padding-left: 0px;
+  }
+  100%{
+    left: 300px;
+  }
+}
+
+@keyframes slideClose{
+  0% {
+    padding-left: 300px;
+  }
+  100%{
+    left: 0px;
+  }
+}
+
+@keyframes ButtonSlideLeft{
+  0% {
+    position: absolute;
+    left: 0;
+    width: 276px;
+    background-color: transparent;
+  }
+  100%{
+    position: absolute;
+    left: 300px;
+    width: 56px;
+    background-color: var(--color-Main);
+  }
+}
+
+@keyframes ButtonSlideRight{
+  0% {
+    position: absolute;
+    right: -56px;
+    left: 300px; 
+    width: 56px;
+    background-color: var(--color-Main);
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    color: var(--color-White);
+  }
+  100%{
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    width: 276px;
+    background-color: transparent;
+    border-radius: 0px;
+    color: var(--color-Gray);
+  }
+}

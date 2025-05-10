@@ -2,15 +2,13 @@ import { useSelector } from "react-redux";
 import { TasksWrapper } from "./Columns-styled";
 import TaskItem from "./TaskItem";
 import { RootState } from "../../store/Store";
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import { Column } from "../../types";
 import { useDroppable } from "@dnd-kit/core";
 
-function TasksColumn({ column }: { column: Column }) {
+function TasksColumn({ column, }: 
+  { 
+    column: Column, 
+  }) {
   const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
   const tasks = useSelector((state: RootState) => state.Boards.tasks);
 

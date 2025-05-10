@@ -28,7 +28,7 @@ function App() {
       dispatch(fetchBoardData());
     }
     if(data.length > 0){
-      setActiveBoard(data[1]);
+      setActiveBoard(data[0]);
     }
   }, [getStatus])
   

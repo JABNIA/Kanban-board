@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../store/Store'
-import { open, setTask } from '../../store/details/detailsSlice'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Task } from '../../types'
 
 
 function TaskItem({taskId, columnName}: {taskId: string, columnName: string}) {
@@ -15,22 +13,14 @@ function TaskItem({taskId, columnName}: {taskId: string, columnName: string}) {
     id: taskId,
     data: {
       task: task,
+      type:'task',
+      columnName: columnName
     }
   })
   const style = transform ? {
     transition,
-    transform: CSS.Transform.toString(transform)
+    transform: CSS.Transform.toString(transform),
   } : undefined;
-
-
-
-  function handlePointerDown(e: React.MouseEvent) {
-    e.stopPropagation()
-    if (e.button === 0) {
-      dispatch(open());
-      dispatch(setTask(task));
-    }
-  }
 
   if(!task) return;
 

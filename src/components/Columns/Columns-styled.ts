@@ -24,7 +24,7 @@ export const StatusColumnsWrapper = styled.div`
 
 export const TasksWrapper = styled.div<{darkMode: boolean}>`
     width: 280px;
-    min-height: 800px;
+    height: auto;
     scrollbar-width: none;
     display: flex;
     flex-direction: column;

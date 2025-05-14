@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
 import { TasksWrapper } from "./Columns-styled";
-import TaskItem from "./TaskItem";
+import PragmaticTaskItem from "./TaskItem";
 import { RootState } from "../../store/Store";
 import { Column } from "../../types";
-import { useDroppable } from "@dnd-kit/core";
+import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { useEffect, useRef, useState } from "react";
+import invariant from "tiny-invariant";
 
 function TasksColumn({ column, }: 
   { 
@@ -11,24 +13,33 @@ function TasksColumn({ column, }:
   }) {
   const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
   const tasks = useSelector((state: RootState) => state.Boards.tasks);
+  const ref = useRef<HTMLDivElement>(null);
+  const [isDraggedOver, setIsDraggedOver] = useState(false);
+  useEffect(() => {
+      const el = ref.current;
+      invariant(el, "Element ref is not set");
 
-  const { isOver, setNodeRef } = useDroppable({
-    id: column.id,
-    data: {
-      type: "column",
-    },
-  });
-
+    return dropTargetForElements({
+      element: el,
+      onDragStart: () => setIsDraggedOver(true),
+      onDragEnter: () => setIsDraggedOver(true),
+      onDragLeave: () => setIsDraggedOver(false),
+      onDrop: () => setIsDraggedOver(false),
+      getData: () => ({ type: "column", columnId: column.id }),
+      getIsSticky: () => true,
+      
+    });
+  },[])
   return (
-    <div ref={setNodeRef}>
-      <h3 className="status-header" key={column.name} style={{color: isOver ? "blue" : "black"}}>
+    <div ref={ref} style={{ backgroundColor: isDraggedOver ? "lightblue" : "transparent" }}>
+      <h3 className="status-header" key={column.name} >
         {column.name} ({column.taskIds.length})
       </h3>
       
-        <TasksWrapper darkMode={darkMode}>
+        <TasksWrapper darkMode={darkMode} >
           {column.taskIds.map((taskId) => (
-            <TaskItem key={taskId} taskId={taskId} columnName={column.name} />
-          ))}
+            <PragmaticTaskItem key={taskId} taskId={taskId} />
+           ))}
         </TasksWrapper>
     </div>
   );

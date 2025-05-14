@@ -3,7 +3,7 @@ export type Subtask = {
     isCompleted: boolean;
   };
   
-export  type Task = {
+export type Task = {
     id: string;
     title: string;
     description: string;
@@ -11,20 +11,50 @@ export  type Task = {
     subtasks: Subtask[];
   };
   
-export  type Column = {
+export type Column = {
     id: string;
     name: string;
     taskIds: string[];
   };
   
-export  type Board = {
+export type Board = {
     id: string;
     name: string;
     columnIds: string[];
   };
   
-export  type Data = {
+export type Data = {
     boards: Board[];
     columns: Column[];
     tasks: Task[];
+  };
+  
+export type sourceType = {
+  element: Record<string, unknown>;
+  dragHandle: null | HTMLElement;
+  data: {
+    type: string;
+    taskId: string;
+  };
+};
+
+
+export type HandleDropParams = {
+    source: sourceType;
+    location: {
+      current: {
+        dropTargets: Array<{
+          data: {
+            columnId: string;
+          };
+        }>;
+      };
+      initial: {
+        dropTargets: Array<{
+          data: {
+            columnId: string;
+          };
+        }>;
+      };
+    };
   };

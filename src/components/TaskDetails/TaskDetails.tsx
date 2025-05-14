@@ -2,7 +2,7 @@ import { DetailsWrapper } from "./taskDetails-styled";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/Store";
 import { useState } from "react";
-import { Column, Subtask, Task } from "../../store/FetchData/FetchData";
+import { Column, Subtask, Task } from "../../types";
 import useBoardContext from "../../context";
 import { NewTaskModalWrapper } from "../NewTaskModal/newTaskModal-styled";
 import { edit } from "../../store/details/detailsSlice";
@@ -17,7 +17,8 @@ function TaskDetails() {
   );
   const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
   const { activeBoard, setActiveBoard } = useBoardContext();
-  const getStatuses = activeBoard !== undefined ? activeBoard.columns.map((column) => column.name) : [];
+  const columns = useSelector((state: RootState) => state.Boards.columns);
+  const getStatuses = columns.filter(column => activeBoard.columnIds.includes(column.id)).map(column => column.name);
   const [listOpen, setListOpen] = useState<boolean>(false);
   const [taskSettings, setTaskSettings] = useState<boolean>(false)
   const [taskEditMenu, setTaskEditMenu] = useState<boolean>(false)
@@ -111,6 +112,7 @@ const handleDeleteSubtask = (subtaskIndex: number) =>{
 
   const handleEditTask = () => {
     const updated: Task = {
+      id: selectedTask.id,
       title: title,
       description: description,
       subtasks: subtasks,

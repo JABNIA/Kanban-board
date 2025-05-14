@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Task } from "../FetchData/FetchData";
-
-
-
+import { Task } from "../../types";
 type taskDetailType = {
     task: Task,
     detailsOpen: boolean
@@ -10,6 +7,7 @@ type taskDetailType = {
 
 const initialState: taskDetailType = {
     task: {
+        id: "",
         title: "",
         description: "",
         status: "",

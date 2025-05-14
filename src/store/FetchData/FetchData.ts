@@ -33,7 +33,7 @@ export const data = createSlice({
             state.columns = action.payload
         }
             },
-    extraReducers: (builder) => {
+        extraReducers: (builder) => {
             builder.addCase(fetchBoardData.pending, (state) => {
                 state.status = "idle"
             }).addCase(fetchBoardData.fulfilled, (state: dataState, action: PayloadAction<Data>) => {

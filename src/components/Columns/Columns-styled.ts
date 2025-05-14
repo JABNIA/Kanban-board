@@ -2,16 +2,18 @@ import styled from "styled-components";
 
 export const StatusColumnsWrapper = styled.div`
     width: 1440px;
-    height: 100%;
+    height: 800px;
     margin-left: 24px;
     padding-top: 24px;
     display: flex;
     justify-content: flex-start;
     gap: 24px;
 
+
     div{
         width: 280px;
     }
+
     .status-header{
         margin-bottom: 24px;
         font-weight: 700;
@@ -25,12 +27,13 @@ export const StatusColumnsWrapper = styled.div`
 export const TasksWrapper = styled.div<{darkMode: boolean}>`
     width: 280px;
     height: auto;
-    scrollbar-width: none;
     display: flex;
     flex-direction: column;
     gap: 20px;
     margin-bottom: 20px;
+    overflow: scroll;
 
+   
     .task{
         width: 280px;
         height: auto;

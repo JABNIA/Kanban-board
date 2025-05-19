@@ -5,12 +5,13 @@ import TableSelectMenu from './components/TableSelectMenu/TableSelectMenu'
 import { AppDispatch, RootState } from './store/Store'
 import { useDispatch, useSelector } from 'react-redux'
 import Background from './components/background/Background'
-import TaskDetails from './components/TaskDetails/TaskDetails'
+import TaskDetails from './components/ModalComponent/TaskDetails/TaskDetails'
 import { fetchBoardData } from './store/FetchData/FetchData'
 import { useEffect, useState } from 'react'
 import { boardContext } from './context';
-import NewBoardComponent from './components/NewBoard/NewBoard'
+import NewBoardComponent from './components/ModalComponent/NewBoard/NewBoard'
 import { Board } from './types'
+import { setBoard } from './store/Table/TableSlice'
 
 
 function App() {
@@ -22,13 +23,12 @@ function App() {
   const getStatus = useSelector((state: RootState) => state.Boards.status)
   const data = useSelector((state: RootState) => state.Boards.boards)
 
-
   useEffect(() => {
     if(getStatus === "idle"){
       dispatch(fetchBoardData());
     }
     if(data.length > 0){
-      setActiveBoard(data[0]);
+      dispatch(setBoard(data[0]));
     }
   }, [getStatus])
   

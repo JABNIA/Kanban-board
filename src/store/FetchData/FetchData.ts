@@ -6,7 +6,8 @@ interface dataState {
     boards: Board[],
     columns: Column[],
     tasks: Task[],
-    status: string
+    status: string,
+    activeBoardColumns: Column[]
 }
 
 
@@ -14,7 +15,8 @@ const initialState: dataState = {
     boards: [],
     columns: [],
     tasks: [],
-    status:"idle"
+    status:"idle",
+    activeBoardColumns: []
 }
 
 export const data = createSlice({
@@ -31,8 +33,11 @@ export const data = createSlice({
         },
         setColumns: (state, action) => {
             state.columns = action.payload
+        },
+        setActiveBoardColumns: (state, action) => {
+            state.activeBoardColumns = action.payload
         }
-            },
+        },
         extraReducers: (builder) => {
             builder.addCase(fetchBoardData.pending, (state) => {
                 state.status = "idle"
@@ -60,7 +65,7 @@ export const fetchBoardData = createAsyncThunk(
     }
 )
 
-export const { addNewBoard, setTasks, setColumns } = data.actions
+export const { addNewBoard, setTasks, setColumns, setActiveBoardColumns } = data.actions
 
 export default data.reducer;
 

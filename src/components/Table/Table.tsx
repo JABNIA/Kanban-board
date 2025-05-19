@@ -9,6 +9,7 @@ function Table() {
   const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
   const firstLoad = useSelector((state: RootState) => state.toogleMenu.firstLoad)
 
+  
 
   return (
     <TableWrapper darkMode={darkMode} menuOpen={menuOpen} firstLoad={firstLoad}>

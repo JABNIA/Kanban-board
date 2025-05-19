@@ -1,24 +1,30 @@
 import { DetailsWrapper } from "./taskDetails-styled";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store/Store";
+import { AppDispatch, RootState } from "../../../store/Store";
 import { useState } from "react";
-import { Column, Subtask, Task } from "../../types";
-import useBoardContext from "../../context";
+import { Subtask, Task } from "../../../types";
 import { NewTaskModalWrapper } from "../NewTaskModal/newTaskModal-styled";
-import { edit } from "../../store/details/detailsSlice";
+import { setActiveBoardColumns, setColumns, setTasks } from "../../../store/FetchData/FetchData";
 
 function TaskDetails() {
   const dispatch = useDispatch<AppDispatch>()
-  const selectedTask = useSelector(
-    (state: RootState) => state.taskDetailsModal.task
-  );
-  const finishedSubtasks = selectedTask.subtasks.filter(
+  // redux thingies 
+  const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
+  const columnIds = useSelector((state: RootState) => state.Table.columnIds);
+  const columns = useSelector((state: RootState) => state.Boards.columns);
+  const activeColumns = columns.filter(column => columnIds.includes(column.id));
+  const tasks = useSelector((state: RootState) => state.Boards.tasks);
+  const selectedTaskId = useSelector((state: RootState) => state.taskDetailsModal.taskId);
+  const selectedTask = tasks.find(task => {return task.id === selectedTaskId });
+  if (!selectedTask) return;
+  const finishedSubtasks = selectedTask?.subtasks.filter(
     (subtask) => subtask.isCompleted
   );
-  const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
-  const { activeBoard, setActiveBoard } = useBoardContext();
-  const columns = useSelector((state: RootState) => state.Boards.columns);
-  const getStatuses = columns.filter(column => activeBoard.columnIds.includes(column.id)).map(column => column.name);
+  const getStatuses = activeColumns.map(column => {
+    return {
+      columnId: column.id,
+      columnName:column.name
+  }});
   const [listOpen, setListOpen] = useState<boolean>(false);
   const [taskSettings, setTaskSettings] = useState<boolean>(false)
   const [taskEditMenu, setTaskEditMenu] = useState<boolean>(false)
@@ -30,63 +36,47 @@ function TaskDetails() {
 
   //handlers
 
-  const handleSelectStatus = async (statusName: string, Task: Task) => {
+  const handleSelectStatus = async (statusName: string, columnId: string) => {
     setStatus(statusName);
     setListOpen(false);
-    if (activeBoard !== undefined) {
-      setActiveBoard({
-        ...activeBoard,
-        columns: activeBoard.columns.map((column: Column) => {
-          if (Task.status === column.name) {
-            return {
-              ...column,
-              tasks: column.tasks.filter((task) => task.title !== Task.title),
-            };
-          }
-          if (column.name === statusName) {
-            return {
-              ...column,
-              tasks: [...column.tasks, { ...Task, status: statusName }],
-            };
-          }
-          return column;
-        }),
-      });
-    }
+    const updatedTasks = tasks.map(task => {
+      if (task.id === selectedTaskId){
+        return {
+          ...task, 
+          status: statusName
+        }
+      }
+      return task;
+    })
+    const updatedColumns = columns.map(column => {
+      if (column.taskIds.includes(selectedTaskId) && column.id !== columnId){
+        return {
+          ...column,
+          taskIds: column.taskIds.filter(taskId => taskId !== selectedTaskId)
+        }
+      }
+      if(columnId === column.id){
+        return {
+          ...column,
+          taskIds: [selectedTaskId, ...column.taskIds ]
+        }
+      }
+      return column;
+    })
+    dispatch(setTasks([...updatedTasks]))
+    dispatch(setColumns([...updatedColumns]))
+    dispatch(setActiveBoardColumns(updatedColumns))
   };
 
   const handleChange = (Task: Task, Subtask: Subtask) => {
-    if (activeBoard !== undefined) {
-      setActiveBoard({
-        ...activeBoard,
-        columns: activeBoard.columns.map((column: Column) => {
-          if (Task.status === column.name) {
-            return {
-              ...column,
-              tasks: column.tasks.map((task: Task) => {
-                if (task.title === Task.title) {
-                  return {
-                    ...task,
-                    subtasks: task.subtasks.map((subtask: Subtask) => {
-                      if (subtask.title === Subtask.title) {
-                        return {
-                          ...subtask,
-                          isCompleted: !subtask.isCompleted,
-                        };
-                      }
-                      return subtask;
-                    }),
-                  };
-                }
-                return task;
-              }),
-            };
-          }
-
-          return column;
-        }),
-      });
-    }
+    const alteredSubtasks = tasks.map(task => {
+      if (task.id === Task.id){
+        const updatedSubtask = {...Subtask, isCompleted: !Subtask.isCompleted};
+        return updatedSubtask;
+      }
+      return task;
+    })  
+    dispatch(setTasks(alteredSubtasks));
   };
 
   const handleInputSubtaskName = (title:string, subtaskIndex: number) => {
@@ -119,28 +109,7 @@ const handleDeleteSubtask = (subtaskIndex: number) =>{
       status: status
     }
 
-    const updatedColumns = activeBoard.columns.map(column => {
-      if(column.name === status){
-        return {
-          ...column,
-          tasks: column.tasks.map(task => {
-          if(task.title === selectedTask.title){
-            return updated;
-          }
-          return task;
-        })}
-      }
-      return column;
-    })
-    
-    const updatedBoard = {
-      ...activeBoard,
-      columns: updatedColumns
-    }
-    console.log(updatedBoard)
-    dispatch(edit(updated))
-    setActiveBoard(updatedBoard)
-  
+  return updated
   }
 
 
@@ -202,14 +171,14 @@ const handleDeleteSubtask = (subtaskIndex: number) =>{
               <ul className="status-list">
                 {getStatuses.map((status) => (
                   <li
-                    key={status}
+                    key={status.columnId}
                     className="status-list-item"
                     onClick={() => {
                       setEditStatusListOpen(false)
-                      setStatus(status)
+                      setStatus(status.columnName)
                     }}
                   >
-                    {status}
+                    {status.columnName}
                   </li>
                 ))}
               </ul>
@@ -252,7 +221,7 @@ const handleDeleteSubtask = (subtaskIndex: number) =>{
             key={subtask.title}
             subtask={subtask}
             selectedTask={selectedTask}
-            handleChange={handleChange}
+            // handleChange={handleChange}
             />
           );
         })}
@@ -273,13 +242,13 @@ const handleDeleteSubtask = (subtaskIndex: number) =>{
         <ul className="status-list">
           {getStatuses.map((status) => (
             <li
-            key={status}
+            key={status.columnId}
             className="status-list-item"
             onClick={() => {
-              handleSelectStatus(status, selectedTask);
+              handleSelectStatus(status.columnName, status.columnId);
             }}
             >
-              {status}
+              {status.columnName}
             </li>
           ))}
         </ul>
@@ -294,11 +263,11 @@ export default TaskDetails;
 function LabelCheckbox({
   subtask,
   selectedTask,
-  handleChange,
+  // handleChange,
 }: {
   subtask: Subtask;
   selectedTask: Task;
-  handleChange: (selectedTask: Task, subtask: Subtask) => void;
+  // handleChange: (selectedTask: Task, subtask: Subtask) => void;
 }) {
   const [checked, setChecked] = useState<boolean>(subtask.isCompleted);
   return (
@@ -306,7 +275,7 @@ function LabelCheckbox({
       key={subtask.title}
       className="subtask"
       onClick={() => {
-        handleChange(selectedTask, subtask);
+        // handleChange(selectedTask, subtask);
         setChecked((curr) => !curr);
       }}
     >

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { NewBoardWrapper } from './NewBoard-styled'
-import { addNewBoard, Column } from '../../store/FetchData/FetchData';
+import { addNewBoard } from '../../../store/FetchData/FetchData';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/Store';
-import { AddBoard } from '../../store/addNewBoard/addNewBoardSlice';
+import { AppDispatch, RootState } from '../../../store/Store';
+import { AddBoard } from '../../../store/addNewBoard/addNewBoardSlice';
+import { Column } from "../../../types"; 
+
 
 function NewBoardComponent() {
     const dispatch = useDispatch<AppDispatch>()
@@ -11,14 +13,15 @@ function NewBoardComponent() {
     const [boardName, setBoardName] = useState<string>("");
     const [columns, setColumns] = useState<Column[]>([
         {
+            id: "",
             name: "",
-            tasks: []
+            taskIds: []
         }
     ]
     )
 
     const handleAddNewColumn = () => {
-        setColumns(prev => [...prev, {name: "", tasks: []}])
+        setColumns(prev => [...prev, {id: "", name: "", taskIds: []}])
     }
 
     const handleColumnNameChange = (name:string, columnIndex:number) => {

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types";
 type taskDetailType = {
     task: Task,
+    taskId: string,
     detailsOpen: boolean
 }
 
@@ -18,6 +19,7 @@ const initialState: taskDetailType = {
           }
         ]
       },
+    taskId: "",
     detailsOpen: false,
 }
 
@@ -33,7 +35,7 @@ const detailsSlice = createSlice({
         state.detailsOpen = false;
        },
        setTask: (state, action) => {
-        state.task = action.payload;
+        state.taskId = action.payload;
        },
        updateTask: (state, action) => {
             state.task = {...state.task, status: action.payload}; 

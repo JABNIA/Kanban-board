@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { useContext } from "react";
-import { Board } from "./store/FetchData/FetchData";
+import { Board } from "./types";
+
 
 interface BoardContextType {
     activeBoard: Board;

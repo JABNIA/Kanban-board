@@ -4,13 +4,14 @@ export const StatusColumnsWrapper = styled.div`
     width: 1440px;
     height: 800px;
     margin-left: 24px;
-    padding-top: 24px;
+    
     display: flex;
     justify-content: flex-start;
     gap: 24px;
-
-
+    
+    
     div{
+        border-radius: 8px;
         width: 280px;
     }
 
@@ -24,17 +25,21 @@ export const StatusColumnsWrapper = styled.div`
     }
 `
 
-export const TasksWrapper = styled.div<{darkMode: boolean}>`
+export const TasksWrapper = styled.div<{darkMode: boolean, isDraggedOver: boolean}>`
+    position: relative;
     width: 280px;
-    height: auto;
+    min-height: 800px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 20px 0;
     margin-bottom: 20px;
-    overflow: scroll;
+    overflow: scroll;   
+    background-color: ${props => props.isDraggedOver ? "var(--color-Main-Opacity)" : "transparent"};
 
    
     .task{
+        position: relative;
         width: 280px;
         height: auto;
         padding: 23px 16px;

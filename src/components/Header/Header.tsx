@@ -1,15 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { AddNewTaskBtn, HeaderWrapper } from './Header-styled'
-import { AppDispatch, RootState } from '../../store/Store'
-import useBoardContext from '../../context'
-import { newTaskModalOpen } from '../../store/addNewTask/addNewTaskSlisce'
-
+import { useDispatch, useSelector } from 'react-redux';
+import { AddNewTaskBtn, HeaderWrapper } from './Header-styled';
+import { AppDispatch, RootState } from '../../store/Store';
+import { newTaskModalOpen } from '../../store/addNewTask/addNewTaskSlisce';
 
 function Header() {
   const dispatch = useDispatch<AppDispatch>()
   const toogleDarkMode = useSelector((state:RootState) => state.switchMode.darkMode)
   const toogleTableMenuOpen = useSelector((state:RootState) => state.toogleMenu.open)
-  const {activeBoard} = useBoardContext();
+  const activeBoard = useSelector((state: RootState) => state.Table)
   
   const handleAddNewTask = () => {
     dispatch(newTaskModalOpen())
@@ -30,4 +28,4 @@ function Header() {
   )
 }
 
-export default Header
+export default Header;

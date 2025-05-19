@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { Board } from "../FetchData/FetchData"
+import { Board } from "../../types"
 
 
 
-const initialState: Board = {name: "", columns: [], id: ""};
+const initialState: Board = {name: "", columnIds: [], id: ""};
     
 
 export const TableSlice = createSlice({
@@ -12,7 +12,7 @@ export const TableSlice = createSlice({
     reducers: {
         setBoard: (state, action) => {
             state.name = action.payload.name;
-            state.columns = action.payload.columns;
+            state.columnIds = action.payload.columnIds;
             state.id = action.payload.id;
         }
     }})

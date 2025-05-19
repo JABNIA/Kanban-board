@@ -11,10 +11,12 @@ function TasksColumn({ column, }:
   { 
     column: Column, 
   }) {
+
   const darkMode = useSelector((state: RootState) => state.switchMode.darkMode);
-  const tasks = useSelector((state: RootState) => state.Boards.tasks);
   const ref = useRef<HTMLDivElement>(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
+  const columns = useSelector((state: RootState) => state.Boards.columns);
+  
   useEffect(() => {
       const el = ref.current;
       invariant(el, "Element ref is not set");
@@ -25,18 +27,21 @@ function TasksColumn({ column, }:
       onDragEnter: () => setIsDraggedOver(true),
       onDragLeave: () => setIsDraggedOver(false),
       onDrop: () => setIsDraggedOver(false),
-      getData: () => ({ type: "column", columnId: column.id }),
+      getData: () => (
+        { type: "column", columnId: column.id }),
       getIsSticky: () => true,
       
     });
-  },[])
+  },[columns])
+
+  
   return (
-    <div ref={ref} style={{ backgroundColor: isDraggedOver ? "lightblue" : "transparent" }}>
+    <div ref={ref} >
       <h3 className="status-header" key={column.name} >
         {column.name} ({column.taskIds.length})
       </h3>
       
-        <TasksWrapper darkMode={darkMode} >
+        <TasksWrapper darkMode={darkMode} isDraggedOver={isDraggedOver}>
           {column.taskIds.map((taskId) => (
             <PragmaticTaskItem key={taskId} taskId={taskId} />
            ))}

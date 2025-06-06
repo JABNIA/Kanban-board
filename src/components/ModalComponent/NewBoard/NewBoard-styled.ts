@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const NewBoardWrapper = styled.div`
+export const NewBoardWrapper = styled.div<{darkMode: boolean}>`
     position: absolute;
     width: 480px;
     height: auto;
@@ -8,7 +8,7 @@ export const NewBoardWrapper = styled.div`
     left: 480px;
     padding: 32px;
     border-radius: 6px;
-    background-color: #FFFFFF;
+    background-color: ${props => props.darkMode ? "var(--color-Dark-Components)" : "#FFFFFF"};
 
     .header{
         margin-bottom: 24px;
@@ -16,6 +16,7 @@ export const NewBoardWrapper = styled.div`
         font-size: 18px;
         line-height: 100%;
         letter-spacing: 0px;
+        color: ${props => props.darkMode ? "#FFFFFF" : "var(--color-Black)"}
     }
 
     .input-name-label{
@@ -31,15 +32,20 @@ export const NewBoardWrapper = styled.div`
         width: 416px;
         height: 40px;
         margin-top: 8px;
-        border: 1px solid var(--color-Border);
+        border: 1px solid var(--color-Gray);
         border-radius: 4px;
     }
 
     .column-name{
         width: 385px;
         height: 40px;
-        border: 1px solid var(--color-Border);
+        border: 1px solid var(--color-Gray);
         border-radius: 4px; 
+    }
+
+    input{
+        background-color: transparent;
+        border-color: #828FA340;
     }
 
     .column-names-inputs{
@@ -67,8 +73,8 @@ export const NewBoardWrapper = styled.div`
         height: 40px;
         margin-bottom: 24px;
         border-radius: 20px;
-        background-color: var(--color-Main-Opacity);
-        color: var(--color-Main);
+        background-color: ${props => props.darkMode ? "#FFFFFF" : "var(--color-Main-Opacity)"};
+        color: ${props => props.darkMode ? "var(--color-Main)" : "#FFFFFF"};
         border: none;
         font-weight: 700;
         font-size: 13px;

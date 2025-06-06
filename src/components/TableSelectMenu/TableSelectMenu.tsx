@@ -6,6 +6,8 @@ import { toogle } from "../../store/Toogle/ToogleSlice";
 import { AddBoard } from "../../store/addNewBoard/addNewBoardSlice";
 import { setBoard } from "../../store/Table/TableSlice";
 import { useEffect } from "react";
+import { setActiveBoardColumns } from "../../store/FetchData/FetchData";
+import { openModal } from "../../store/Modal/ModalSlice";
 
 function TableSelectMenu() {
   const toogleSelectMenu = useSelector(
@@ -21,12 +23,18 @@ function TableSelectMenu() {
   const activeBoard = useSelector(
     (state: RootState) => state.Table
   );
+  const columns = useSelector((state:RootState) => state.Boards.columns)
   const dispatch = useDispatch<AppDispatch>();
 
   const handleClick = () => {
     dispatch(toogle);
   };
-
+  const selectColumns = (columnIdArr: string[]) => {
+    const filteredColumns = columns.filter(column => columnIdArr.includes(column.id));
+    
+    return filteredColumns;
+  }
+ 
     useEffect(() => {}, [activeBoard])
 
   return (
@@ -56,7 +64,8 @@ function TableSelectMenu() {
                     : "board-name"
                 }
                 onClick={() => {
-                  dispatch(setBoard({...board}))}}
+                  dispatch(setBoard({...board}))
+                  dispatch(setActiveBoardColumns(selectColumns(board.columnIds)))}}
               >
                 <div className="board-icon">
                   <svg
@@ -81,7 +90,10 @@ function TableSelectMenu() {
             );
           })}
         </ul>
-        <button className="new-board-btn" onClick={() => dispatch(AddBoard())}>
+        <button className="new-board-btn" onClick={() => {
+          dispatch(openModal())
+          dispatch(AddBoard())
+          }}>
           <div className="board-icon">
             <svg
               width="16"

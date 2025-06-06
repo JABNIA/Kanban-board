@@ -7,14 +7,17 @@ import invariant from "tiny-invariant";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { attachClosestEdge, extractClosestEdge, Edge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import DropIndicator from "@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box";
+import { openModal } from "../../store/Modal/ModalSlice";
+
 
 
 function PragmaticTaskItem({ taskId }: { taskId: string }) {
   const dispatch = useDispatch<AppDispatch>();
   const tasks = useSelector((state: RootState) => state.Boards.tasks);
-  const task = useMemo(() => tasks.find((task) => {
-    return task.id === taskId
-  }), [tasks, taskId]);
+  const task = useMemo(() => {
+    if (!tasks) return undefined;
+    return tasks.find((task) => task.id === taskId);
+  }, [tasks, taskId]);
   const subtasksCompleted = task
   ? task.subtasks.filter((subtask) => subtask.isCompleted)
   : [];
@@ -56,7 +59,6 @@ function PragmaticTaskItem({ taskId }: { taskId: string }) {
         getIsSticky: () => true,
         onDragEnter: ({source, self}) => {
           if(source.data.taskId !== taskId) {
-            
             setClosestEdge(extractClosestEdge(self.data));
           };
         },
@@ -78,12 +80,16 @@ function PragmaticTaskItem({ taskId }: { taskId: string }) {
   }, [taskId]);
   
   const handleClick = () => {
-    dispatch(setTask(taskId));
+    const selected =tasks.find(task => task.id === taskId)
+    dispatch(setTask(selected));
+    dispatch(openModal())
     dispatch(open());
   };
   
   return (
     <>
+    <div className="task-wrapper">
+
       <div
         className="task"
         ref={ref}
@@ -96,6 +102,7 @@ function PragmaticTaskItem({ taskId }: { taskId: string }) {
         </p>
       {closestEdge && <DropIndicator edge={closestEdge} gap="20px" indent="10px"/>}
       </div>
+    </div>
     </>
   );
 }

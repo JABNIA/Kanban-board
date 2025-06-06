@@ -7,6 +7,10 @@ import detailsSlice from "./details/detailsSlice";
 import TableSlice from "./Table/TableSlice";
 import newBoard from "./addNewBoard/addNewBoardSlice";
 import newTask from "./addNewTask/addNewTaskSlisce";
+import ModalReducer from "./Modal/ModalSlice";
+import newColumnSlice from "./addNewColumn/addNewColumn";
+import deleteSegment from "./deleteFunctional/deleteSlice";
+import editBoardModalSlice from "./editBoard/editBoardSlice"
 
 
 export const store = configureStore({
@@ -19,6 +23,10 @@ export const store = configureStore({
        taskDetailsModal: detailsSlice,
        NewBoard: newBoard,
        AddNewTask: newTask,
+       Modal: ModalReducer,
+       NewColumn: newColumnSlice,
+       DeleteSegment: deleteSegment,
+       editBoard: editBoardModalSlice,
     }
 })
 

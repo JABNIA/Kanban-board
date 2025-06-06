@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 import { useContext } from "react";
 import { Board } from "./types";
 

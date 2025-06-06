@@ -4,6 +4,8 @@ import { AppDispatch } from '../../store/Store'
 import { close } from '../../store/details/detailsSlice'
 import { closeNewBoardModal } from '../../store/addNewBoard/addNewBoardSlice'
 import { newTaskModalClose } from '../../store/addNewTask/addNewTaskSlisce'
+import { closeModal } from '../../store/Modal/ModalSlice'
+import { NewColumnModalClosed } from '../../store/addNewColumn/addNewColumn'
 
 function Background() {
     const dispatch = useDispatch<AppDispatch>()
@@ -12,6 +14,8 @@ function Background() {
     dispatch(close())
     dispatch(closeNewBoardModal())
     dispatch(newTaskModalClose())
+    dispatch(NewColumnModalClosed())
+    dispatch(closeModal())
   }
 
 

@@ -1,59 +1,80 @@
 import { NewTaskModalWrapper } from './newTaskModal-styled'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../store/Store'
+import { AppDispatch, RootState } from '../../../store/Store'
 import { useState } from 'react'
-import useBoardContext from '../../context'
-import { newTaskModalClose } from '../../store/addNewTask/addNewTaskSlisce'
+import { newTaskModalClose } from '../../../store/addNewTask/addNewTaskSlisce'
+import { Column, Subtask } from '../../../types'
+import { setColumns, setTasks } from '../../../store/FetchData/FetchData'
 
 function NewTaskModal() {
     const dispatch = useDispatch<AppDispatch>();
     const darkMode = useSelector((state: RootState) => state.switchMode.darkMode)
-    const { activeBoard, setActiveBoard } = useBoardContext();
-    const getStatuses = activeBoard !== undefined ? activeBoard.columns.map((column:Column) => column.name) : [];
+    const activeBoard = useSelector((state: RootState) => state.Table);
+    const columns = useSelector((state: RootState) => state.Boards.columns)
+    const getStatuses = columns.filter((column: Column) => {if(activeBoard.columnIds.includes(column.id)) return {columnId: column.id, columnName: column.name}})
+    const Tasks = useSelector((state: RootState) => state.Boards.tasks);
     const [title, setTitle] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [subtasks, setSubtasks] = useState<Subtask[]>([{title:"", isCompleted: false}])
-    const [status, setStatus] = useState<string>(getStatuses[0])
+    const [status, setStatus] = useState<{name:string , columnId:string}>(
+      {name: getStatuses[0].name, columnId: getStatuses[0].id}
+    )
     const [listOpen, setListOpen] = useState<boolean>(false);
+//handlers
+    const handleTitleInput = (input: string) => {
+      setTitle(input)
+    }
+
+    const handleSetDescription = (inputValue: string) => {
+      setDescription(inputValue)
+    }
 
     const handleAddSubtaskinput = () => {
-        setSubtasks(
-            [...subtasks, {title:"", isCompleted:false}]
-        )
+      setSubtasks(prev => [...prev, {title: "", isCompleted: false}])
     }
 
-    const handleDeleteSubtask = (subtaskIndex: number) =>{
-        const upddatedSubtask = subtasks.filter((subtask, index) => index !== subtaskIndex)
-        setSubtasks(upddatedSubtask)
+    const handleDeleteSubtask = (subtaskIndex: number) => {
+      const updatedSubtasks = subtasks.filter((subtask, index) => {
+        return index !== subtaskIndex;
+      }) 
+
+      setSubtasks(updatedSubtasks);
     }
 
-    const handleTitleInput = (value: string) => setTitle(value)
+    const handleInputSubtaskName = (value: string, subtaskIndex: number) => {
+      const updatedSubtaskTitle = subtasks.map((subtask, index) => {
+        if (index === subtaskIndex){
+          return {...subtask, title: value }
+        }
+        return subtask;
+      })
 
-    const handleSetDescription = (description:string) => {
-        setDescription(description)
-    } 
-
-    const handleInputSubtaskName = (title:string, subtaskIndex: number) => {
-        const updated = subtasks.map((subtask, index) => {
-            if (index === subtaskIndex){
-                return {...subtask, title: title};
-            }
-            return subtask;
-        })
-        setSubtasks(updated)
+      setSubtasks(updatedSubtaskTitle)
     }
 
     const handleCreateTask = () => {
-        const newTaskAddedInBoard = activeBoard.columns.map((column: Column) => {
-            if(column.name === status){
-                return {...column, tasks: [...column.tasks, 
-                    {title: title, description: description, subtasks: subtasks, status: status}]}
-            }
-            return column;
-        })
-        setActiveBoard({...activeBoard, columns: newTaskAddedInBoard})
-        dispatch(newTaskModalClose())
+      const newTask = {
+        id: `task-${Tasks.length + 1}`,
+        title: title,
+        description: description,
+        status: status,
+        subtasks: subtasks
+      }
+      const updatedBoardColumns = columns.map(column => {
+        if(column.name === status.name && activeBoard.columnIds.includes(column.id)){
+          return {...column, taskIds: [...column.taskIds, `task-${Tasks.length + 1}`]}
+        }
+        return column;
+      })
+
+
+      dispatch(setTasks([...Tasks, newTask]))
+      dispatch(setColumns(updatedBoardColumns))
+      dispatch(newTaskModalClose())
     }
+    
+//end of handlers
+
 
     return (
     <NewTaskModalWrapper darkMode={darkMode}>
@@ -92,7 +113,7 @@ function NewTaskModal() {
         onClick={() => setListOpen((curr) => !curr)}
         style={{ border: listOpen ? "1px solid var(--color-Main)" : "" }}
       >
-        <span>{status}</span>
+        <span>{status.name}</span>
         <img
           src="./src/assets/icons/icon-chevron-down.svg"
           alt="chevron down"
@@ -102,21 +123,20 @@ function NewTaskModal() {
         <ul className="status-list">
           {getStatuses.map((status) => (
             <li
-              key={status}
+              key={status.id}
               className="status-list-item"
               onClick={() => {
                 setListOpen(false)
-                setStatus(status)
-
+                setStatus({name: status.name, columnId:status.id})
               }}
             >
-              {status}
+              {status.name}
             </li>
           ))}
         </ul>
       )}
       <button className="modal-btn create-task"
-        onClick={handleCreateTask}
+        onClick={() => handleCreateTask()}
       >Create Task</button>
         </div>
     </NewTaskModalWrapper>

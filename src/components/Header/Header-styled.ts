@@ -9,7 +9,7 @@ export const HeaderWrapper = styled.header<{menuOpen: boolean, darkMode: boolean
     color:  ${props => props.darkMode ? "var(--color-White)" : "var(--color-Black)"};
 
     .logo{
-        flex: 2;
+        width: 209px;
         display: flex;
         align-items: center;
         border-right: 1px solid ${props => props.darkMode ? "var(--color-Dark-Gray)" : "var( --color-Border)"};
@@ -18,8 +18,8 @@ export const HeaderWrapper = styled.header<{menuOpen: boolean, darkMode: boolean
     }
 
     .table-name{
+        width: 1005px;
         padding: ${props => props.menuOpen ? "32px 100px 37px" : "32px 29px 37px"};
-        flex: 8;
         font-weight: 700;
         font-size: 24px;
         line-height: 100%;
@@ -28,10 +28,42 @@ export const HeaderWrapper = styled.header<{menuOpen: boolean, darkMode: boolean
     }
 
     .button-container{
-        margin-right: 32.38px;
-        flex: 2;
+        width: 192.62px;
+        margin: 32.38px;
+        position: relative;
         display: flex;
         align-items: center;
+    }
+
+    .dropdown{
+        position: absolute;
+        top: 90px;
+        right: 24px;
+        width: 192px;
+        height: 94px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 8px;
+        background-color: ${props => props.darkMode ? "var(--color-Dark-Components)" : "var(--color-White)" };
+        box-shadow: 0.5px 0.5px 1px var(--color-Gray);
+    }
+
+    .edit {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 23px;
+        letter-spacing: 0px;
+        color: var(--color-Gray);
+    }
+
+    .delete {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 23px;
+        letter-spacing: 0px;
+        color: var(--color-Tomato);
     }
 `
 

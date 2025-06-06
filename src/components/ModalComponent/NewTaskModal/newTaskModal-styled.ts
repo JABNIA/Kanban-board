@@ -11,6 +11,11 @@ export const NewTaskModalWrapper = styled.div<{darkMode: boolean}>`
     background-color: ${props => props.darkMode ? "var(--color-Dark-Components)" : "var(--color-White)"};
     color: ${props => props.darkMode ? "var(--color-White)" : "var(--color-Black)"};
 
+    input, textarea {
+        background-color: transparent;
+        color: ${props => props.darkMode ? "var(--color-White)" : "var(--color-Black)"};
+    }
+
     .simple-wrapper{
         position: relative;
         margin-bottom: 24px;
@@ -76,8 +81,8 @@ export const NewTaskModalWrapper = styled.div<{darkMode: boolean}>`
     }
 
     .add-subtask{
-        background-color: #635FC71A;
-        color: var(--color-Main);
+        background-color: ${props => props.darkMode ? "#FFFFFF" : "var(--color-Main-Opacity)"};
+        color: ${props => props.darkMode ? "var(--color-Main)" : "#FFFFFF"};
     }
 
     .create-task{

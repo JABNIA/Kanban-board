@@ -35,7 +35,7 @@ const detailsSlice = createSlice({
         state.detailsOpen = false;
        },
        setTask: (state, action) => {
-        state.taskId = action.payload;
+        state.task = action.payload;
        },
        updateTask: (state, action) => {
             state.task = {...state.task, status: action.payload}; 

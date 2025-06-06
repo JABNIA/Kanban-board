@@ -24,9 +24,7 @@ export const data = createSlice({
     initialState,
     reducers: {
         addNewBoard: (state, action) => {
-            state.boards = action.payload.boards
-            state.columns = action.payload.columns
-            state.tasks = action.payload.tasks
+            state.boards = action.payload
         },
         setTasks: (state, action) => {
             state.tasks = action.payload
